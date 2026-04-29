@@ -24,7 +24,7 @@ python3 extract_hls_cc.py \
 The script:
 
 1. Fetches the HLS master manifest.
-2. Selects the highest-bandwidth media playlist.
+2. Selects the lowest-bandwidth media playlist.
 3. Polls live MPEG-TS segments.
 4. Uses PyAV to decode video frames.
 5. Reads A53 closed-caption side data from decoded frames.

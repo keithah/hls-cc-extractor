@@ -53,8 +53,8 @@ def parse_master(manifest_url: str, manifest: str) -> tuple[str, bool]:
     has_closed_captions = "TYPE=CLOSED-CAPTIONS" in manifest
     lines = [line.strip() for line in manifest.splitlines() if line.strip()]
 
-    best_bandwidth = -1
-    best_url = None
+    lowest_bandwidth = None
+    lowest_url = None
     pending_bandwidth = None
     for line in lines:
         if line.startswith("#EXT-X-STREAM-INF:"):
@@ -67,12 +67,12 @@ def parse_master(manifest_url: str, manifest: str) -> tuple[str, bool]:
                     except ValueError:
                         pending_bandwidth = -1
         elif pending_bandwidth is not None and not line.startswith("#"):
-            if pending_bandwidth > best_bandwidth:
-                best_bandwidth = pending_bandwidth
-                best_url = urljoin(manifest_url, line)
+            if lowest_bandwidth is None or pending_bandwidth < lowest_bandwidth:
+                lowest_bandwidth = pending_bandwidth
+                lowest_url = urljoin(manifest_url, line)
             pending_bandwidth = None
 
-    return best_url or manifest_url, has_closed_captions
+    return lowest_url or manifest_url, has_closed_captions
 
 
 def parse_media_playlist(playlist_url: str, manifest: str) -> list[MediaSegment]:
