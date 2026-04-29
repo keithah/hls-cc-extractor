@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+*.srt
+*.ts
+.DS_Store
+.venv/
+venv/
